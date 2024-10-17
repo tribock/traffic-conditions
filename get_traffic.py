@@ -19,7 +19,7 @@ origin = os.getenv("LOCATION_START",'Stettfurt')
 destination = os.getenv("LOCATION_DESTINATION", 'Überlandstrasse 1, Dübendorf')
 
 # Path to the CSV file
-csv_file = 'out/traffic_data.csv'
+csv_file = 'out/data/traffic_data_'+time.strftime("%Y%m%d-%H%M%S")+'.csv'
 
 # Function to round time to the nearest quarter hour
 def round_time_to_quarter_hour(dt):
