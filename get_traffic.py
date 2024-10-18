@@ -72,16 +72,15 @@ def schedule_traffic_updates():
     if ENV == 'dev':
         # In development mode, run immediately and every 10 seconds
         print("Development mode: Running immediately and every 10 seconds.")
-        get_travel_time()  # Run once immediately
         schedule.every(10).seconds.do(get_travel_time)
     else:
         # In production mode, schedule only between 7 AM to 10 AM, Monday to Friday
-        if current_day < 5 and current_time >= datetime.strptime('07:00:00', '%H:%M:%S').time() and current_time <= datetime.strptime('10:00:00', '%H:%M:%S').time():
-            print("Production mode: Scheduling every 5 minutes between 7 AM and 10 AM.")
-            schedule.every(5).minutes.do(get_travel_time)
+        # if current_day < 5 and current_time >= datetime.strptime('07:00:00', '%H:%M:%S').time() and current_time <= datetime.strptime('10:00:00', '%H:%M:%S').time():
+        print("Production mode: Scheduling every 5 minutes between 7 AM and 10 AM.")
+        schedule.every(5).minutes.do(get_travel_time)
 
+schedule_traffic_updates()
 # Run the scheduler
 while True:
-    schedule_traffic_updates()
     schedule.run_pending()
     time.sleep(1)
