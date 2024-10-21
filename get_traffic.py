@@ -47,14 +47,14 @@ def get_travel_time():
 
         # Prepare data for CSV
         day_of_week = now.strftime('%A')  # Day of the week (e.g., Monday)
-      
+        rounded_time = round_time_to_quarter_hour(now)  # Rounded to nearest quarter hour
 
-        print(f'{day_of_week} | {now} | {travel_time_minutes} minutes')
+        print(f'{day_of_week} | {rounded_time} | {travel_time_minutes} minutes')
 
         # Write to CSV
         with open(csv_file, mode='a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([day_of_week, now, travel_time_minutes])
+            writer.writerow([day_of_week, rounded_time, travel_time_minutes])
             
     except KeyError:
         print("Error fetching the travel time, check your API response.")
