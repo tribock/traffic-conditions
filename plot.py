@@ -45,7 +45,7 @@ for day in average_df['Day Of Week'].unique():
     plt.plot(day_data['Time'], day_data['Travel Time (minutes)'], marker='o', label=day)
 
 # Customize the plot
-plt.title('Average Travel Time from Stettfurt to Dübendorf by Day and Time')
+plt.title('Average Travel Time from Stettfurt to Dübendorf by Day and Time (UTC)')
 plt.xlabel('Time of Day')
 plt.ylabel('Average Travel Time (minutes)')
 plt.xticks(rotation=45)  # Rotate x-axis labels for better readability

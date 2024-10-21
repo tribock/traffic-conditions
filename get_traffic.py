@@ -32,7 +32,7 @@ def round_time_to_quarter_hour(dt):
 
 # Function to get travel time and write it to a CSV file
 def get_travel_time():
-    now = datetime.now()
+    now = datetime.now(datetime.timezone.utc)
     # Request directions
     result = gmaps.distance_matrix(origins=origin, 
                                    destinations=destination, 
@@ -66,8 +66,8 @@ with open(csv_file, mode='w', newline='') as file:
 
 # Schedule the job
 def schedule_traffic_updates():
-    current_day = datetime.now().weekday()
-    current_time = datetime.now().time()
+    current_day = datetime.now(datetime.timezone.utc).weekday()
+    current_time = datetime.now(datetime.timezone.utc).time()
 
     if ENV == 'dev':
         # In development mode, run immediately and every 10 seconds
