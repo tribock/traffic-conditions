@@ -6,6 +6,12 @@ import glob
 # Folder containing the CSV files
 folder_path = 'out/data/'
 
+# Set Filter From to limit frames
+filter_from = '06:00'
+
+# Set Filter From to limit frames
+filter_to = '23:00'
+
 # List all CSV files in the folder
 csv_files = glob.glob(os.path.join(folder_path, '*.csv'))
 
@@ -26,6 +32,10 @@ df['Time'] = pd.to_datetime(df['Time'], format='%H:%M')
 # Round the time to the nearest quarter hour
 df['Time'] = df['Time'].dt.floor('15min')
 
+# Filter data between 06:00 and 20:00 UTC
+df = df[(df['Time'].dt.time >= pd.to_datetime(filter_from).time()) & (df['Time'].dt.time <= pd.to_datetime(filter_to).time())]
+
+
 # Sort by day of the week and time
 df['Day Of Week'] = pd.Categorical(df['Day Of Week'], categories=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], ordered=True)
 df = df.sort_values(by=['Day Of Week', 'Time'])
@@ -37,7 +47,11 @@ average_df = df.groupby(['Day Of Week', 'Time'], observed=True)['Travel Time (mi
 average_df['Time'] = average_df['Time'].dt.strftime('%H:%M')
 
 # Create the plot
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(20, 12))
+
+# Generate x-axis labels for every 15 minutes from 00:00 to 23:45
+time_ticks = pd.date_range(filter_from, filter_to, freq='15min').strftime('%H:%M')
+
 
 # Group by day of the week to plot separate lines for each day
 for day in average_df['Day Of Week'].unique():
@@ -47,6 +61,7 @@ for day in average_df['Day Of Week'].unique():
 # Customize the plot
 plt.title('Average Travel Time from Stettfurt to Dübendorf by Day and Time (UTC)')
 plt.xlabel('Time of Day')
+
 plt.ylabel('Average Travel Time (minutes)')
 plt.xticks(rotation=45)  # Rotate x-axis labels for better readability
 plt.grid(True)
