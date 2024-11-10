@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 API_KEY = os.getenv('GOOGLE_API_KEY')
 ENV = os.getenv('ENV', 'prod')  # Defaults to 'prod' if ENV is not set
 
+TIME = os.getenv("WINTER", False)
+
 if not API_KEY:
     raise ValueError("No API key found in the environment. Please set the GOOGLE_API_KEY environment variable.")
 
@@ -21,6 +23,15 @@ destination = os.getenv("LOCATION_DESTINATION", 'Überlandstrasse 1, Dübendorf'
 # Path to the CSV file
 csv_file = 'out/data/traffic_data_'+time.strftime("%Y%m%d-%H%M%S")+'.csv'
 
+
+def get_time():
+    now = datetime.utcnow()
+    if TIME:
+        print("use wintertime and remove one hour from time.utcnow() to resolve time issue")
+        now = now - timedelta(hours=1, minutes=0)
+    return now
+        
+    
 # Function to round time to the nearest quarter hour
 def round_time_to_quarter_hour(dt):
     """Rounds a datetime object to the nearest quarter hour."""
@@ -32,7 +43,7 @@ def round_time_to_quarter_hour(dt):
 
 # Function to get travel time and write it to a CSV file
 def get_travel_time():
-    now = datetime.utcnow()
+    now = get_time()
     # Request directions
     result = gmaps.distance_matrix(origins=origin, 
                                    destinations=destination, 
